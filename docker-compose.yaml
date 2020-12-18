@@ -7,17 +7,15 @@ services:
     ports: 
       - "5432:5432"
     environment:
-      - POSTGRES_USER=pentaho
-      - POSTGRES_PASSWORD=password
+      - 'POSTGRES_USER=pgadmin'
+      - 'POSTGRES_PASSWORD=pgadmin'
     restart: always
   pentaho:
     image: pentaho-server-ce
     ports:
       - "8080:8080"
     environment:
-      - PGHOST=pentaho-pg
-      - PGUSER=pentaho
-      - PGPASSWORD=password 
+      - 'PGHOST=pentaho-pg'
     depends_on:
       - pentaho-pg
     restart: always

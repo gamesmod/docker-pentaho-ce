@@ -15,7 +15,7 @@ ENV PENTAHO_JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 # Install Dependences
-RUN apt-get update; apt-get install zip netcat -y; \
+RUN apt-get update -y; apt-get install zip netcat -y; \
     apt-get install wget unzip git postgresql-client-9.4 vim -y; \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
     curl -O https://bootstrap.pypa.io/get-pip.py; \
@@ -36,8 +36,6 @@ RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/f
 
 COPY config $PENTAHO_HOME/config
 COPY scripts $PENTAHO_HOME/scripts
-
-RUN chown -R pentaho:pentaho ${PENTAHO_HOME}
 
 WORKDIR /opt/pentaho 
 EXPOSE 8080 
