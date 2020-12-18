@@ -2,7 +2,7 @@ FROM java:7
 
 
 #MAINTAINER Wellington Marinho wpmarinho@globo.com
-#MAINTAINER gamesmod
+MAINTAINER gamesmod
 
 # Init ENV
 ENV BISERVER_VERSION 9.1
