@@ -37,6 +37,8 @@ RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/f
 COPY config $PENTAHO_HOME/config
 COPY scripts $PENTAHO_HOME/scripts
 
+RUN chown -R pentaho:pentaho ${PENTAHO_HOME}
+
 WORKDIR /opt/pentaho 
 EXPOSE 8080 
 CMD ["sh", "scripts/run.sh"]
