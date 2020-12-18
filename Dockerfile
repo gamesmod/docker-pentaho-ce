@@ -1,6 +1,6 @@
 FROM java:7
 
-
+#
 #MAINTAINER Wellington Marinho wpmarinho@globo.com
 MAINTAINER gamesmod
 
