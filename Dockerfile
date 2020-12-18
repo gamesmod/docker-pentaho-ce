@@ -1,7 +1,5 @@
-FROM java:7
+FROM java:8
 
-#
-#MAINTAINER Wellington Marinho wpmarinho@globo.com
 MAINTAINER gamesmod
 
 # Init ENV
@@ -13,8 +11,8 @@ ENV PENTAHO_HOME /opt/pentaho
 # Apply JAVA_HOME
 RUN . /etc/environment
 ENV PENTAHO_JAVA_HOME $JAVA_HOME
-ENV PENTAHO_JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
-ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
+ENV PENTAHO_JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 # Install Dependences
 RUN apt-get update; apt-get install zip netcat -y; \
@@ -32,9 +30,9 @@ USER pentaho
 # Download Pentaho BI Server
 RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/files/Pentaho%20${BISERVER_VERSION}/server/pentaho-server-ce-${BISERVER_TAG}.zip -O /tmp/pentaho-server-ce-${BISERVER_TAG}.zip; \
     /usr/bin/unzip -q /tmp/pentaho-server-ce-${BISERVER_TAG}.zip -d  $PENTAHO_HOME; \
-    rm -f /tmp/pentaho-server-ce-${BISERVER_TAG}.zip $PENTAHO_HOME//pentaho-server-ce/promptuser.sh; \
-    sed -i -e 's/\(exec ".*"\) start/\1 run/' $PENTAHO_HOME/pentaho-server-ce/tomcat/bin/startup.sh; \
-    chmod +x $PENTAHO_HOME/pentaho-server-ce/start-pentaho.sh
+    rm -f /tmp/pentaho-server-ce-${BISERVER_TAG}.zip $PENTAHO_HOME/pentaho-server/promptuser.sh; \
+    sed -i -e 's/\(exec ".*"\) start/\1 run/' $PENTAHO_HOME/pentaho-server/tomcat/bin/startup.sh; \
+    chmod +x $PENTAHO_HOME/pentaho-server/start-pentaho.sh
 
 COPY config $PENTAHO_HOME/config
 COPY scripts $PENTAHO_HOME/scripts
