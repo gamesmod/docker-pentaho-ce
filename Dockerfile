@@ -1,6 +1,7 @@
 FROM openjdk:8
 
-LABEL maintainer=gamesmod
+LABEL maintainer=gamesmod image=pentaho-server-ce
+
 
 # Init ENV
 ENV BISERVER_VERSION 9.3
@@ -20,7 +21,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 # Install Dependences
 RUN apt-get update -y; apt-get install zip netcat -y; \
-    apt-get install wget unzip git postgresql-client-9.4 vim -y; \
+    apt-get install wget unzip git postgresql-client vim -y; \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
     curl -O https://bootstrap.pypa.io/get-pip.py; \
     python get-pip.py; \
@@ -45,6 +46,9 @@ RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/f
 
 COPY config $PENTAHO_HOME/config
 COPY scripts $PENTAHO_HOME/scripts
+
+#Carte config file
+COPY master.xml /home/pentaho/data-integration
 
 WORKDIR /opt/pentaho 
 EXPOSE 8080 
