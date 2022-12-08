@@ -1,12 +1,16 @@
-FROM java:8
+FROM openjdk:8
 
-MAINTAINER gamesmod
+LABEL maintainer=gamesmod
 
 # Init ENV
-ENV BISERVER_VERSION 9.1
-ENV BISERVER_TAG 9.1.0.0-324
+ENV BISERVER_VERSION 9.3
+ENV BISERVER_TAG 9.3.0.0-428
+
 
 ENV PENTAHO_HOME /opt/pentaho
+
+ENV KETTLE_HOME $PENTAHO_HOME/data-integration
+ENV PENTAHO_DI_JAVA_OPTIONS "-Xms1024m -Xmx2048m -XX:+UseParallelGC -XX:ParallelGCThreads=4"
 
 # Apply JAVA_HOME
 RUN . /etc/environment
@@ -26,9 +30,14 @@ RUN apt-get update -y; apt-get install zip netcat -y; \
 RUN mkdir ${PENTAHO_HOME}; useradd -s /bin/bash -d ${PENTAHO_HOME} pentaho; chown pentaho:pentaho ${PENTAHO_HOME}
 
 USER pentaho
+# Download Pentaho DI
+
+RUN wget --progress=dot:giga http://downloads.sourceforge.net/project/pentaho/Pentaho-${BISERVER_VERSION}/client-tools/pdi-ce-${BISERVER_TAG}.zip -O /tmp/pdi-ce-${BISERVER_TAG}.zip; \
+	unzip -q /tmp/pdi-ce-${BISERVER_TAG}.zip -d  $PENTAHO_HOME; \
+	rm -f /tmp/pdi-ce-${BISERVER_TAG}.zip
 
 # Download Pentaho BI Server
-RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/files/Pentaho%20${BISERVER_VERSION}/server/pentaho-server-ce-${BISERVER_TAG}.zip -O /tmp/pentaho-server-ce-${BISERVER_TAG}.zip; \
+RUN /usr/bin/wget --progress=dot:giga https://sourceforge.net/projects/pentaho/files/Pentaho-${BISERVER_VERSION}/server/pentaho-server-ce-${BISERVER_TAG}.zip -O /tmp/pentaho-server-ce-${BISERVER_TAG}.zip; \
     /usr/bin/unzip -q /tmp/pentaho-server-ce-${BISERVER_TAG}.zip -d  $PENTAHO_HOME; \
     rm -f /tmp/pentaho-server-ce-${BISERVER_TAG}.zip $PENTAHO_HOME/pentaho-server/promptuser.sh; \
     sed -i -e 's/\(exec ".*"\) start/\1 run/' $PENTAHO_HOME/pentaho-server/tomcat/bin/startup.sh; \
